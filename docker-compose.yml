@@ -12,7 +12,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8000:8000"
+      - "8070:8000"
     command: >
       bash -c "
         until pg_isready -h db -U symfony -d symfony_db; do
@@ -43,7 +43,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: symfony_db
     ports:
-      - "5432:5432"
+      - "5678:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -64,7 +64,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "4200:4200"
+      - "4100:4200"
     command: ["sh", "-c", "npm install && ng serve --host 0.0.0.0 --poll 2000 --watch"]
 
 
