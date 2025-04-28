@@ -39,9 +39,9 @@ services:
     container_name: symfony_postgres
     restart: always
     environment:
-      POSTGRES_USER: symfony
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: symfony_db
+      POSTGRES_USER: Koalasb
+      POSTGRES_PASSWORD: Cartuja
+      POSTGRES_DB: Museocartuja_db
     ports:
       - "5678:5432"
     volumes:
