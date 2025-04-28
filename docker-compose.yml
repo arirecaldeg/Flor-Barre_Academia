@@ -15,7 +15,7 @@ services:
       - "8070:8000"
     command: >
       bash -c "
-        until pg_isready -h db -U symfony -d symfony_db; do
+        until pg_isready -h db -U Koalasb -d Museocartuja_db; do
           sleep 2;
         done;
         
@@ -43,11 +43,11 @@ services:
       POSTGRES_PASSWORD: Cartuja
       POSTGRES_DB: Museocartuja_db
     ports:
-      - "5678:5432"
+      - "5500:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U symfony -d symfony_db"]
+      test: ["CMD-SHELL", "pg_isready -U Koalasb -d Museocartuja_db"]
       interval: 10s
       retries: 5
 
