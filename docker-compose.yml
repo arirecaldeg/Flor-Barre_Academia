@@ -3,7 +3,7 @@ services:
     build:
       context: ./symfony-backend
       dockerfile: ./docker/php/Dockerfile
-    container_name: symfony_backend_Cartuja
+    container_name: symfony_backend_florybarre
     restart: unless-stopped
     working_dir: /var/www/app
     volumes:
@@ -12,10 +12,10 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8070:8000"
+      - "8080:8000"
     command: >
       bash -c "
-        until pg_isready -h db -U Koalasb -d Museocartuja_db; do
+        until pg_isready -h db -U Florybarre -d Florybarre_db; do
           sleep 2;
         done;
         
@@ -36,18 +36,18 @@ services:
 
   db:
     image: postgres:13
-    container_name: symfony_postgres_Cartuja
+    container_name: symfony_postgres_florybarre
     restart: always
     environment:
-      POSTGRES_USER: Koalasb
-      POSTGRES_PASSWORD: Cartuja
-      POSTGRES_DB: Museocartuja_db
+      POSTGRES_USER: florybarre
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: Florybarre_db
     ports:
-      - "5500:5432"
+      - "5678:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U Koalasb -d Museocartuja_db"]
+      test: ["CMD-SHELL", "pg_isready -U Florybarre -d Florybarre_db"]
       interval: 10s
       retries: 5
 
@@ -55,7 +55,7 @@ services:
     build:
       context: ./angular-frontend
       dockerfile: Dockerfile
-    container_name: angular_frontend_Cartuja
+    container_name: angular_frontend_florybarre
     restart: always
     working_dir: /app
     volumes:
@@ -64,7 +64,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "4100:4200"
+      - "4080:4200"
     command: ["sh", "-c", "npm install && ng serve --host 0.0.0.0 --poll 2000 --watch"]
 
 
