@@ -1,7 +1,12 @@
-<h1 class="text-primary font-sans text-4xl">
-  ¡Tailwind personalizado funcionando!
-</h1>
+<div class="min-h-screen flex flex-col">
+  <!-- Navbar siempre arriba -->
+  <app-navbar></app-navbar>
 
-<button class="bg-accent text-white font-bold py-2 px-4 rounded">
-  Botón
-</button>
+  <!-- Contenido dinámico (rutas) que ocupa todo el espacio disponible -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer siempre abajo -->
+  <app-footer></app-footer>
+</div>
