@@ -1,1 +1,43 @@
-<p>clases works!</p>
+<div class="min-h-screen flex flex-col bg-white">
+  <!-- Cabecera -->
+  <div class="bg-[#FCF7F8] h-32 flex items-center justify-center">
+    <h1 class="text-3xl font-semibold text-center">Nuestras Clases</h1>
+  </div>
+
+  <!-- Contenido -->
+  <div class="flex-grow bg-[#EACFCE] py-20 px-4 flex flex-col items-center">
+    <!-- Botón de reserva -->
+    <button routerLink="/login" class="mb-10 bg-white border border-gray-400 rounded-full px-6 py-2 text-sm font-medium hover:bg-gray-100 transition">
+      Reservar una clase
+    </button>
+
+    <!-- Tarjetas de clase -->
+    <div class="w-full max-w-4xl space-y-16">
+      <div *ngFor="let clase of clases" class="bg-[#FCF7F8] rounded-xl shadow-md p-4">
+        <img [src]="clase.imagen" [alt]="clase.nombre" class="w-full h-56 object-cover rounded-lg mb-4" />
+        
+        <!-- Iconos -->
+        <div class="flex items-center gap-4 text-sm text-white mb-2">
+          <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
+            <i class="fas fa-user"></i> {{ clase.cupo }}
+          </span>
+          <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
+            <i class="fas fa-clock"></i> {{ clase.duracion }}
+          </span>
+          <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
+            <i class="fas fa-signal"></i> {{ clase.nivel }}
+          </span>
+        </div>
+
+        <!-- Nombre y descripción -->
+        <h2 class="text-lg font-semibold mb-2">{{ clase.nombre }}</h2>
+        <p class="text-md text-gray-700 whitespace-pre-line">{{ clase.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logo centrado con fondo rosa -->
+  <div class="bg-[#EACFCE] flex justify-center py-10">
+    <img src="florybarrefirma.png" alt="Flor y Barre logo" class="w-80" />
+  </div>
+</div>

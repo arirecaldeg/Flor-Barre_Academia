@@ -11,7 +11,7 @@ module.exports = {
         accent: '#F59E0B',     // Amarillo acento
       },
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'], // Fuente predeterminada
+        montserrat: ['Montserrat', 'sans-serif'], // Asegura fallback si no carga Montserrat
       },
     },
   },

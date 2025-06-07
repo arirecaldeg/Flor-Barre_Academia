@@ -1,1 +1,43 @@
-<p>horarios works!</p>
+<div class="min-h-screen flex flex-col bg-white">
+  <!-- Título blanco con fondo rosita claro -->
+  <div class="bg-[#FCF7F8] h-32 flex items-center justify-center">
+    <h1 class="text-3xl font-semibold text-center">Nuestras Clases</h1>
+  </div>
+
+  <!-- Bloque rosa claro que se expande hasta el footer -->
+  <div class="flex-grow bg-[#EACFCE] py-20 px-4 flex flex-col items-center">
+
+    <!-- Tabla de clases -->
+    <div class="bg-white rounded-xl p-6 shadow-md w-full max-w-6xl overflow-x-auto">
+      <table class="table-auto border-collapse w-full">
+        <thead>
+          <tr>
+            <th class="p-4 text-left text-base text-[#333]"></th>
+            <th *ngFor="let day of days" class="p-4 text-base text-[#333] font-semibold text-center">
+              {{ day }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let time of times">
+            <td class="p-3 text-sm font-semibold text-[#555]">{{ time }}</td>
+            <td *ngFor="let day of days" class="p-[4px]">
+              <div
+                class="text-sm text-center rounded-lg py-2 px-3 font-medium min-h-[40px] flex items-center justify-center"
+                [ngClass]="getCellColor(day)">
+                {{ getClassName(day, time) }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Logo centrado debajo -->
+    <div class="flex justify-center mt-10">
+      <img src="florybarrefirma.png" alt="Flor y Barre logo" class="w-80" />
+    </div>
+  </div>
+
+  <!-- El footer vendrá aquí automáticamente desde app.component.html -->
+</div>

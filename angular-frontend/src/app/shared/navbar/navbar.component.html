@@ -1,9 +1,10 @@
-<nav class="border px-4 py-4 md:px-8">
+<nav class="px-4 py-4 md:px-8 bg-[#C0A3A7]">
   <div class="flex items-center justify-between">
     <!-- Logo + Eslogan -->
     <div class="flex items-center gap-4">
-      <img src="logo.png" alt="Logo" class="w-12 h-12 md:w-14 md:h-14" />
-      <span class="text-lg md:text-xl font-semibold font-serif">Florece con cada movimiento</span>
+     
+      <img routerLink="/" src="logo.png" alt="Logo" class="w-12 h-12 md:w-14 md:h-14 cursor-pointer" />
+      <span routerLink="/" class="text-lg md:text-xl font-semibold font-serif cursor-pointer">Florece con cada movimiento</span>
     </div>
 
     <!-- Botón Hamburguesa (solo visible en móvil) -->
@@ -12,32 +13,32 @@
     </button>
 
     <!-- Enlaces de navegación (ocultos en móvil) -->
-    <ul
-      class="hidden md:flex gap-8 text-base font-light ml-0 md:ml-40 lg:ml-80">
-      <li><a href="#" class="hover:underline">Clases</a></li>
-      <li><a href="#" class="hover:underline">Sobre Nosotros</a></li>
-      <li><a href="#" class="hover:underline">Horarios</a></li>
-      <li><a href="#" class="hover:underline">Tarifas</a></li>
-      <li><a href="#" class="hover:underline">Contáctanos</a></li>
+    <ul class="hidden md:flex gap-8 text-base font-light ml-0 md:ml-40 lg:ml-80">
+      <li><a routerLink="/sobre-nosotros" class="hover:underline">Sobre Nosotros</a></li>
+      <li><a routerLink="/clases" class="hover:underline">Clases</a></li>
+      <li><a routerLink="/horarios" class="hover:underline">Horarios</a></li>
+      <li><a routerLink="/tarifas" class="hover:underline">Tarifas</a></li>
+      <li><a routerLink="/contactanos" class="hover:underline">Contáctanos</a></li>
     </ul>
 
     <!-- Botón de Iniciar Sesión -->
-    <button
-      class="hidden md:block border border-black rounded-full px-6 py-2 text-sm hover:bg-black hover:text-white transition">
+    <button routerLink="/login"
+      class="hidden md:block border border-[#EACFCE] rounded-full px-6 py-2 text-sm hover:bg-black hover:text-white transition">
       Iniciar Sesión
     </button>
   </div>
 
-  
+
   <!-- Menú desplegable en móvil -->
-  <div id="mobile-menu" class="mt-4 hidden md:hidden flex-col space-y-4">
-    <a href="#" class="block hover:underline">Clases</a>
-    <a href="#" class="block hover:underline">Sobre Nosotros</a>
-    <a href="#" class="block hover:underline">Horarios</a>
-    <a href="#" class="block hover:underline">Tarifas</a>
-    <a href="#" class="block hover:underline">Contáctanos</a>
-    <button class="w-full border border-black rounded-full px-6 py-2 text-sm hover:bg-black hover:text-white transition">
-      Iniciar Sesión
-    </button>
-  </div>
+<div id="mobile-menu" class="mt-4 hidden md:hidden flex-col space-y-4">
+  <a routerLink="/clases" class="block hover:underline">Clases</a>
+  <a routerLink="/sobre-nosotros" class="block hover:underline">Sobre Nosotros</a>
+  <a routerLink="/horarios" class="block hover:underline">Horarios</a>
+  <a routerLink="/tarifas" class="block hover:underline">Tarifas</a>
+  <a routerLink="/contacto" class="block hover:underline">Contáctanos</a>
+  <button
+    class="w-full border border-black rounded-full px-6 py-2 text-sm hover:bg-black hover:text-white transition">
+    Iniciar Sesión
+  </button>
+</div>
 </nav>
