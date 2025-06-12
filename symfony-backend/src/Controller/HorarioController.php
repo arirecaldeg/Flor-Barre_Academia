@@ -55,4 +55,42 @@ class HorarioController extends AbstractController
 
         return $this->json(['message' => 'Horario creado correctamente'], 201);
     }
+    #[Route('/api/horarios/{id}', name: 'update_horario', methods: ['PUT'])]
+public function updateHorario(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $horario = $em->getRepository(Horario::class)->find($id);
+    if (!$horario) {
+        return $this->json(['error' => 'Horario no encontrado'], 404);
+    }
+
+    $data = json_decode($request->getContent(), true);
+
+    $clase = $em->getRepository(Clase::class)->find($data['clase_id']);
+    if (!$clase) {
+        return $this->json(['error' => 'Clase no encontrada'], 404);
+    }
+
+    $horario->setHorarioInicio(new \DateTime($data['horario_inicio']));
+    $horario->setHoraFin(new \DateTime($data['hora_fin']));
+    $horario->setFecha(new \DateTime($data['fecha']));
+    $horario->setClase($clase);
+
+    $em->flush();
+
+    return $this->json(['message' => 'Horario actualizado correctamente']);
+}
+
+#[Route('/api/horarios/{id}', name: 'delete_horario', methods: ['DELETE'])]
+public function deleteHorario(int $id, EntityManagerInterface $em): JsonResponse
+{
+    $horario = $em->getRepository(Horario::class)->find($id);
+    if (!$horario) {
+        return $this->json(['error' => 'Horario no encontrado'], 404);
+    }
+
+    $em->remove($horario);
+    $em->flush();
+
+    return $this->json(['message' => 'Horario eliminado correctamente']);
+}   
 }

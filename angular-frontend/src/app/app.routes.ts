@@ -9,6 +9,7 @@ import { TarifasComponent } from './pages/tarifas/tarifas.component';
 //import { NavbarComponent } from './shared/navbar/navbar.component';
 //import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
+import { AdminHorariosComponent } from './administrador/admin-horarios/admin-horarios.component';
 
 
 export const routes: Routes = [
@@ -21,7 +22,7 @@ export const routes: Routes = [
   { path: 'contactanos', component: ContactanosComponent },
   { path: 'registro', component: RegistroComponent },
 
- // Rutas para el administrador 
+ // Rutas para el administrador
+  { path: 'admin/horarios', component: AdminHorariosComponent },
 
 ];
- 
