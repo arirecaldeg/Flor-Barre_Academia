@@ -7,7 +7,8 @@
   <!-- Contenido -->
   <div class="flex-grow bg-[#EACFCE] py-20 px-4 flex flex-col items-center">
     <!-- Botón de reserva -->
-    <button routerLink="/login" class="mb-10 bg-white border border-gray-400 rounded-full px-6 py-2 text-sm font-medium hover:bg-gray-100 transition">
+    <button routerLink="/login"
+      class="mb-10 bg-white border border-gray-400 rounded-full px-6 py-2 text-sm font-medium hover:bg-gray-100 transition">
       Reservar una clase
     </button>
 
@@ -15,17 +16,36 @@
     <div class="w-full max-w-4xl space-y-16">
       <div *ngFor="let clase of clases" class="bg-[#FCF7F8] rounded-xl shadow-md p-4">
         <img [src]="clase.imagen" [alt]="clase.nombre" class="w-full h-56 object-cover rounded-lg mb-4" />
-        
+
         <!-- Iconos -->
         <div class="flex items-center gap-4 text-sm text-white mb-2">
           <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
-            <i class="fas fa-user"></i> {{ clase.cupo }}
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"
+              stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+              <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+            </svg>
+            {{ clase.cupo }}
           </span>
           <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
-            <i class="fas fa-clock"></i> {{ clase.duracion }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"
+              stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+              <path d="M12 12l2 3" />
+              <path d="M12 7v5" />
+            </svg>
+            {{ clase.duracion }}
           </span>
           <span class="bg-gray-700 rounded-full px-2 py-1 flex items-center gap-1">
-            <i class="fas fa-signal"></i> {{ clase.nivel }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"
+              stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+              <path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+              <path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+              <path d="M4 20h14" />
+            </svg>
+            {{ clase.nivel }}
           </span>
         </div>
 

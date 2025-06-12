@@ -20,5 +20,8 @@ export const routes: Routes = [
   { path: 'tarifas', component: TarifasComponent },
   { path: 'contactanos', component: ContactanosComponent },
   { path: 'registro', component: RegistroComponent },
+
+ // Rutas para el administrador 
+
 ];
  

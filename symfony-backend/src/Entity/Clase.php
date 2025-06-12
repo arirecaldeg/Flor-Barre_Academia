@@ -33,7 +33,7 @@ class Clase
 
     #[ORM\ManyToOne(inversedBy: 'clases')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $users = null;
+    private ?User $user = null;
 
     /**
      * @var Collection<int, Horario>
@@ -111,14 +111,14 @@ class Clase
         return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(User $user): static
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }
