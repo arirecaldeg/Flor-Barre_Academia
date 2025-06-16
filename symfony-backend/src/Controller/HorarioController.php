@@ -33,6 +33,28 @@ class HorarioController extends AbstractController
 
         return $this->json($data);
     }
+    #[Route('/api/horarios/{id}', name: 'get_horario_by_id', methods: ['GET'])]
+public function getHorarioById(int $id, EntityManagerInterface $em): JsonResponse
+{
+    $horario = $em->getRepository(Horario::class)->find($id);
+
+    if (!$horario) {
+        return $this->json(['error' => 'Horario no encontrado'], 404);
+    }
+
+    $data = [
+        'id' => $horario->getId(),
+        'hora_inicio' => $horario->getHorarioInicio()->format('H:i'),
+        'hora_fin' => $horario->getHoraFin()->format('H:i'),
+        'fecha' => $horario->getFecha()->format('Y-m-d'),
+        'clase' => [
+            'id' => $horario->getClase()->getId(),
+            'nombre' => $horario->getClase()->getNombre(),
+        ],
+    ];
+
+    return $this->json($data);
+    }   
 
     #[Route('/api/horarios', name: 'create_horario', methods: ['POST'])]
     public function createHorario(Request $request, EntityManagerInterface $em): JsonResponse
