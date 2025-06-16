@@ -23,9 +23,11 @@
                                 <select [ngModel]="getClassName(day, time)"
                                     (ngModelChange)="updateClass(day, time, $event)"
                                     class="bg-transparent text-sm w-full text-center outline-none">
-                                    <option *ngFor="let option of availableClasses" [value]="option">
-                                        {{ option || '' }}
+                                    <option value="">–</option>
+                                    <option *ngFor="let clase of clases" [value]="clase.id">
+                                        {{ clase.nombre }}
                                     </option>
+
                                 </select>
                             </div>
                         </td>

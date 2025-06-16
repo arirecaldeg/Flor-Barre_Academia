@@ -1,87 +1,88 @@
 <?php
 
-namespace App\Controller;
+namespace App\Entity;
 
-use App\Entity\Notificacion;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\NotificacionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
-#[Route('/api/notificaciones')]
-class NotificacionController extends AbstractController
+#[ORM\Entity(repositoryClass: NotificacionRepository::class)]
+class Notificacion
 {
-    #[Route('', name: 'get_notificaciones', methods: ['GET'])]
-    public function getAll(EntityManagerInterface $em): JsonResponse
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $fecha_subscripcion = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'notificacions')]
+    private Collection $users;
+
+    public function __construct()
     {
-        $notificaciones = $em->getRepository(Notificacion::class)->findAll();
-
-        $data = [];
-        foreach ($notificaciones as $n) {
-            $data[] = [
-                'id' => $n->getId(),
-                'email' => $n->getEmail(),
-                'fecha_subscripcion' => $n->getFechaSubscripcion()->format('Y-m-d'),
-                'user_ids' => $n->getUsers()->map(fn(User $u) => $u->getId())->toArray()
-            ];
-        }
-
-        return $this->json($data);
+        $this->users = new ArrayCollection();
     }
 
-    #[Route('', name: 'create_notificacion', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
+    public function getId(): ?int
     {
-        $data = json_decode($request->getContent(), true);
-
-        $notificacion = new Notificacion();
-        $notificacion->setEmail($data['email']);
-        $notificacion->setFechaSubscripcion(new \DateTime($data['fecha_subscripcion'] ?? 'now'));
-
-        if (isset($data['user_ids']) && is_array($data['user_ids'])) {
-            foreach ($data['user_ids'] as $userId) {
-                $user = $em->getRepository(User::class)->find($userId);
-                if ($user) {
-                    $notificacion->addUser($user);
-                }
-            }
-        }
-
-        $em->persist($notificacion);
-        $em->flush();
-
-        return $this->json(['message' => 'Notificación creada', 'id' => $notificacion->getId()], 201);
+        return $this->id;
     }
 
-    #[Route('/{id}', name: 'get_notificacion_by_id', methods: ['GET'])]
-    public function getById(int $id, EntityManagerInterface $em): JsonResponse
+    public function getEmail(): ?string
     {
-        $n = $em->getRepository(Notificacion::class)->find($id);
-        if (!$n) {
-            return $this->json(['error' => 'Notificación no encontrada'], 404);
-        }
-
-        return $this->json([
-            'id' => $n->getId(),
-            'email' => $n->getEmail(),
-            'fecha_subscripcion' => $n->getFechaSubscripcion()->format('Y-m-d'),
-            'user_ids' => $n->getUsers()->map(fn(User $u) => $u->getId())->toArray()
-        ]);
+        return $this->email;
     }
 
-    #[Route('/{id}', name: 'delete_notificacion', methods: ['DELETE'])]
-    public function delete(int $id, EntityManagerInterface $em): JsonResponse
+    public function setEmail(string $email): static
     {
-        $n = $em->getRepository(Notificacion::class)->find($id);
-        if (!$n) {
-            return $this->json(['error' => 'Notificación no encontrada'], 404);
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFechaSubscripcion(): ?\DateTimeInterface
+    {
+        return $this->fecha_subscripcion;
+    }
+
+    public function setFechaSubscripcion(\DateTimeInterface $fecha_subscripcion): static
+    {
+        $this->fecha_subscripcion = $fecha_subscripcion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
         }
 
-        $em->remove($n);
-        $em->flush();
+        return $this;
+    }
 
-        return $this->json(['message' => 'Notificación eliminada']);
+    public function removeUser(User $user): static
+    {
+        $this->users->removeElement($user);
+
+        return $this;
     }
 }

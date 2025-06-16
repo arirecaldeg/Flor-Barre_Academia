@@ -1,122 +1,155 @@
 <?php
 
-namespace App\Controller;
+namespace App\Entity;
 
-use App\Entity\Clase;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ClaseRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
-#[Route('/api/clases')]
-class ClaseController extends AbstractController
+#[ORM\Entity(repositoryClass: ClaseRepository::class)]
+class Clase
 {
-    #[Route('', name: 'get_clases', methods: ['GET'])]
-    public function getClases(EntityManagerInterface $em): JsonResponse
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $nombre = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $nivel = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $instructor = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $descripcion = null;
+
+    #[ORM\Column]
+    private ?int $capacidad_maxima = null;
+
+    #[ORM\ManyToOne(inversedBy: 'clases')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    /**
+     * @var Collection<int, Horario>
+     */
+    #[ORM\OneToMany(targetEntity: Horario::class, mappedBy: 'clase')]
+    private Collection $horarios;
+
+    public function __construct()
     {
-        $clases = $em->getRepository(Clase::class)->findAll();
-
-        $data = [];
-        foreach ($clases as $clase) {
-            $data[] = [
-                'id' => $clase->getId(),
-                'nombre' => $clase->getNombre(),
-                'nivel' => $clase->getNivel(),
-                'instructor' => $clase->getInstructor(),
-                'descripcion' => $clase->getDescripcion(),
-                'capacidad_maxima' => $clase->getCapacidadMaxima(),
-                'user_id' => $clase->getUser()?->getId()
-            ];
-        }
-
-        return $this->json($data);
+        $this->horarios = new ArrayCollection();
     }
 
-    #[Route('', name: 'create_clase', methods: ['POST'])]
-    public function createClase(Request $request, EntityManagerInterface $em): JsonResponse
+    public function getId(): ?int
     {
-        $data = json_decode($request->getContent(), true);
-
-        $user = $em->getRepository(User::class)->find($data['user_id']);
-        if (!$user) {
-            return $this->json(['error' => 'Usuario no encontrado'], 404);
-        }
-
-        $clase = new Clase();
-        $clase->setNombre($data['nombre']);
-        $clase->setNivel($data['nivel']);
-        $clase->setInstructor($data['instructor']);
-        $clase->setDescripcion($data['descripcion']);
-        $clase->setCapacidadMaxima($data['capacidad_maxima']);
-        $clase->setUser($user);
-
-        $em->persist($clase);
-        $em->flush();
-
-        return $this->json(['message' => 'Clase creada correctamente', 'id' => $clase->getId()], 201);
+        return $this->id;
     }
 
-    #[Route('/{id}', name: 'get_clase_by_id', methods: ['GET'])]
-    public function getClaseById(int $id, EntityManagerInterface $em): JsonResponse
+    public function getNombre(): ?string
     {
-        $clase = $em->getRepository(Clase::class)->find($id);
-        if (!$clase) {
-            return $this->json(['error' => 'Clase no encontrada'], 404);
-        }
-
-        return $this->json([
-            'id' => $clase->getId(),
-            'nombre' => $clase->getNombre(),
-            'nivel' => $clase->getNivel(),
-            'instructor' => $clase->getInstructor(),
-            'descripcion' => $clase->getDescripcion(),
-            'capacidad_maxima' => $clase->getCapacidadMaxima(),
-            'user_id' => $clase->getUser()?->getId()
-        ]);
+        return $this->nombre;
     }
 
-    #[Route('/{id}', name: 'update_clase', methods: ['PUT'])]
-    public function updateClase(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function setNombre(string $nombre): static
     {
-        $clase = $em->getRepository(Clase::class)->find($id);
-        if (!$clase) {
-            return $this->json(['error' => 'Clase no encontrada'], 404);
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getNivel(): ?string
+    {
+        return $this->nivel;
+    }
+
+    public function setNivel(string $nivel): static
+    {
+        $this->nivel = $nivel;
+
+        return $this;
+    }
+
+    public function getInstructor(): ?string
+    {
+        return $this->instructor;
+    }
+
+    public function setInstructor(string $instructor): static
+    {
+        $this->instructor = $instructor;
+
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(string $descripcion): static
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getCapacidadMaxima(): ?int
+    {
+        return $this->capacidad_maxima;
+    }
+
+    public function setCapacidadMaxima(int $capacidad_maxima): static
+    {
+        $this->capacidad_maxima = $capacidad_maxima;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Horario>
+     */
+    public function getHorarios(): Collection
+    {
+        return $this->horarios;
+    }
+
+    public function addHorario(Horario $horario): static
+    {
+        if (!$this->horarios->contains($horario)) {
+            $this->horarios->add($horario);
+            $horario->setClase($this);
         }
 
-        $data = json_decode($request->getContent(), true);
+        return $this;
+    }
 
-        if (isset($data['user_id'])) {
-            $user = $em->getRepository(User::class)->find($data['user_id']);
-            if (!$user) {
-                return $this->json(['error' => 'Usuario no encontrado'], 404);
+    public function removeHorario(Horario $horario): static
+    {
+        if ($this->horarios->removeElement($horario)) {
+            // set the owning side to null (unless already changed)
+            if ($horario->getClase() === $this) {
+                $horario->setClase(null);
             }
-            $clase->setUser($user);
         }
 
-        $clase->setNombre($data['nombre'] ?? $clase->getNombre());
-        $clase->setNivel($data['nivel'] ?? $clase->getNivel());
-        $clase->setInstructor($data['instructor'] ?? $clase->getInstructor());
-        $clase->setDescripcion($data['descripcion'] ?? $clase->getDescripcion());
-        $clase->setCapacidadMaxima($data['capacidad_maxima'] ?? $clase->getCapacidadMaxima());
-
-        $em->flush();
-
-        return $this->json(['message' => 'Clase actualizada correctamente']);
-    }
-
-    #[Route('/{id}', name: 'delete_clase', methods: ['DELETE'])]
-    public function deleteClase(int $id, EntityManagerInterface $em): JsonResponse
-    {
-        $clase = $em->getRepository(Clase::class)->find($id);
-        if (!$clase) {
-            return $this->json(['error' => 'Clase no encontrada'], 404);
-        }
-
-        $em->remove($clase);
-        $em->flush();
-
-        return $this->json(['message' => 'Clase eliminada correctamente']);
+        return $this;
     }
 }

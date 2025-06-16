@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// Update the path below if your horario.service.ts is in a different location
-import { HorarioService, Horario } from './horarios.service'; // Adjust the import path as necessary
+import { HorarioService, Horario, Clase } from './horarios.service';
 
 @Component({
   selector: 'app-admin-horarios',
@@ -18,14 +17,21 @@ export class AdminHorariosComponent implements OnInit {
     '17:30', '18:30', '19:30'
   ];
 
-  availableClasses = ['BARRE', 'BARRE SUAVE', 'BARRE EMB', 'BARRE PRO', 'BARRE ENG', '']; // '' = eliminar
-
+  clases: Clase[] = [];
   horarios: Horario[] = [];
 
   constructor(private horarioService: HorarioService) {}
 
   ngOnInit(): void {
+    this.loadClases();
     this.loadHorarios();
+  }
+
+  loadClases(): void {
+    this.horarioService.getClases().subscribe({
+      next: (data) => this.clases = data,
+      error: (err) => console.error('Error al cargar clases:', err)
+    });
   }
 
   loadHorarios(): void {
@@ -48,23 +54,24 @@ export class AdminHorariosComponent implements OnInit {
     return slot?.clase?.nombre || '';
   }
 
-  updateClass(day: string, time: string, newClassName: string): void {
+  updateClass(day: string, time: string, newClassId: string): void {
+    const claseId = parseInt(newClassId, 10);
+    if (isNaN(claseId)) return;
+
+    const selectedClase = this.clases.find(c => c.id === claseId);
+    const fecha = this.getDateForDay(day);
+
     const existing = this.horarios.find(h =>
       this.getDayNameFromDate(h.fecha) === day &&
       h.horario_inicio === time
     );
 
-    if (newClassName === '') {
-      if (existing?.id) {
-        this.horarioService.deleteHorario(existing.id).subscribe(() => {
-          this.horarios = this.horarios.filter(h => h.id !== existing.id);
-        });
-      }
+    if (!claseId && existing?.id) {
+      this.horarioService.deleteHorario(existing.id).subscribe(() => {
+        this.horarios = this.horarios.filter(h => h.id !== existing.id);
+      });
       return;
     }
-
-    const claseId = this.getClaseIdByNombre(newClassName);
-    const fecha = this.getDateForDay(day);
 
     const payload: Horario = {
       fecha,
@@ -76,52 +83,45 @@ export class AdminHorariosComponent implements OnInit {
     if (existing) {
       payload.id = existing.id;
       this.horarioService.updateHorario(payload).subscribe(() => {
-        existing.clase = { id: claseId, nombre: newClassName };
+        existing.clase = selectedClase;
       });
     } else {
       this.horarioService.createHorario(payload).subscribe((created) => {
         this.horarios.push({
           ...payload,
           id: created.id,
-          clase: { id: claseId, nombre: newClassName }
+          clase: selectedClase
         });
       });
     }
-  }
-
-  getClaseIdByNombre(nombre: string): number {
- const clases: { [key: string]: number } = {
-      'BARRE': 1,
-      'BARRE SUAVE': 2,
-      'BARRE EMB': 3,
-      'BARRE PRO': 4,
-      'BARRE ENG': 5
-    };
-    return clases[nombre] ?? 1;
   }
 
   getDayNameFromDate(dateStr: string): string {
     const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return days[new Date(dateStr).getDay()];
   }
+getDateForDay(day: string): string {
+  const dayMap: { [key: string]: number } = {
+    'Lunes': 1,
+    'Martes': 2,
+    'Miércoles': 3,
+    'Jueves': 4,
+    'Viernes': 5,
+    'Sábado': 6
+  };
 
-  getDateForDay(day: string): string {
-    const today = new Date();
-    const targetIndex = this.days.indexOf(day);
-    const currentIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // Lunes = 0
-
-    const diff = targetIndex - currentIndex;
-    const targetDate = new Date(today);
-    targetDate.setDate(today.getDate() + diff);
-
-    return targetDate.toISOString().split('T')[0]; // YYYY-MM-DD
-  }
+  const base = new Date('2025-06-16'); // lunes de una semana de ejemplo
+  const dayOffset = dayMap[day] ?? 1;
+  const result = new Date(base);
+  result.setDate(base.getDate() + (dayOffset - 1));
+  return result.toISOString().split('T')[0];
+}
 
   getHoraFinFromInicio(inicio: string): string {
     const [h, m] = inicio.split(':').map(Number);
     const end = new Date();
     end.setHours(h);
-    end.setMinutes(m + 60); // +1 hora
-    return end.toTimeString().slice(0, 5); // HH:mm
+    end.setMinutes(m + 60);
+    return end.toTimeString().slice(0, 5);
   }
 }

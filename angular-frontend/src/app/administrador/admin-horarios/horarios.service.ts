@@ -20,7 +20,7 @@ export interface Horario {
   providedIn: 'root',
 })
 export class HorarioService {
-  private apiUrl = 'http://localhost:8000/api/horarios';
+  private apiUrl = 'http://localhost:8080/api/horarios';
 
   constructor(private http: HttpClient) {}
 
@@ -39,4 +39,7 @@ export class HorarioService {
   deleteHorario(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+  getClases(): Observable<Clase[]> {
+  return this.http.get<Clase[]>('http://localhost:8080/api/clases');
+}
 }

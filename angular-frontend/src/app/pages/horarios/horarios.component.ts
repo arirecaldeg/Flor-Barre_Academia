@@ -1,22 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-
-interface ClassSlot {
-  day: string;
-  time: string;
-  className: string;
-}
+import { HorarioService, Horario } from '../../administrador/admin-horarios/horarios.service';
 
 @Component({
   selector: 'app-horario',
   standalone: true,
   templateUrl: './horarios.component.html',
   imports: [CommonModule, FormsModule],
-
 })
-export class HorarioComponent {
+export class HorarioComponent implements OnInit {
   days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   times = [
     '07:30', '08:30', '09:30', '10:30',
@@ -24,51 +17,38 @@ export class HorarioComponent {
     '17:30', '18:30', '19:30'
   ];
 
-  classSchedule: ClassSlot[] = [
-    { day: 'Lunes', time: '09:30', className: 'BARRE' },
-    { day: 'Lunes', time: '10:30', className: 'BARRE SUAVE' },
-    { day: 'Lunes', time: '15:30', className: 'BARRE' },
-    { day: 'Lunes', time: '16:30', className: 'BARRE EMB' },
-    { day: 'Lunes', time: '17:30', className: 'BARRE' },
-    { day: 'Lunes', time: '18:30', className: 'BARRE' },
-    { day: 'Lunes', time: '19:30', className: 'BARRE PRO' },
-    { day: 'Martes', time: '07:30', className: 'BARRE' },
-    { day: 'Martes', time: '08:30', className: 'BARRE' },
-    { day: 'Martes', time: '14:30', className: 'BARRE' },
-    { day: 'Martes', time: '16:30', className: 'BARRE EMB' },
-    { day: 'Martes', time: '17:30', className: 'BARRE' },
-    { day: 'Martes', time: '18:30', className: 'BARRE' },
-    { day: 'Martes', time: '19:30', className: 'BARRE PRO' },
-    { day: 'Miércoles', time: '09:30', className: 'BARRE' },
-    { day: 'Miércoles', time: '10:30', className: 'BARRE SUAVE' },
-    { day: 'Miércoles', time: '15:30', className: 'BARRE' },
-    { day: 'Miércoles', time: '17:30', className: 'BARRE ' },
-    { day: 'Miércoles', time: '18:30', className: 'BARRE' },
-    { day: 'Miércoles', time: '19:30', className: 'BARRE PRO' },
-    { day: 'Jueves', time: '07:30', className: 'BARRE' },
-    { day: 'Jueves', time: '08:30', className: 'BARRE' },
-    { day: 'Jueves', time: '14:30', className: 'BARRE' },
-    { day: 'Jueves', time: '16:30', className: 'BARRE EMB' },
-    { day: 'Jueves', time: '17:30', className: 'BARRE' },
-    { day: 'Jueves', time: '18:30', className: 'BARRE' },
-    { day: 'Jueves', time: '19:30', className: 'BARRE PRO' },
-    { day: 'Viernes', time: '09:30', className: 'BARRE' },
-    { day: 'Viernes', time: '10:30', className: 'BARRE SUAVE' },
-    { day: 'Viernes', time: '15:30', className: 'BARRE' },
-    { day: 'Viernes', time: '16:30', className: 'BARRE ENG' },
-    { day: 'Viernes', time: '17:30', className: 'BARRE' },
-    { day: 'Sábado', time: '09:30', className: 'BARRE' },
-    { day: 'Sábado', time: '10:30', className: 'BARRE' },
-    { day: 'Sábado', time: '11:30', className: 'BARRE ENG' },
-    // añade el resto como en la imagen
-  ];
+  horarios: Horario[] = [];
+
+  constructor(private horarioService: HorarioService) {}
+
+  ngOnInit(): void {
+    this.horarioService.getHorarios().subscribe({
+      next: (data) => {
+        this.horarios = data;
+        // Para depurar, opcional:
+        // data.forEach(h => console.log(`${h.fecha} → ${this.getDayNameFromDate(h.fecha)} @ ${h.horario_inicio}`));
+      },
+      error: (err) => console.error('Error al cargar horarios:', err)
+    });
+  }
 
   getClassName(day: string, time: string): string {
-    return this.classSchedule.find(s => s.day === day && s.time === time)?.className || '';
+    const slot = this.horarios.find(h =>
+      this.getDayNameFromDate(h.fecha) === day &&
+      h.horario_inicio === time
+    );
+    return slot?.clase?.nombre || '';
   }
-getCellColor(day: string): string {
-  const isLightDay = ['Lunes', 'Miércoles', 'Viernes'].includes(day);
-  return isLightDay ? 'bg-[#EACFCE] text-[#333]' : 'bg-[#DCCACE] text-[#333]';
-}
 
+  getCellColor(day: string): string {
+    const isLightDay = ['Lunes', 'Miércoles', 'Viernes'].includes(day);
+    return isLightDay ? 'bg-[#EACFCE] text-[#333]' : 'bg-[#DCCACE] text-[#333]';
+  }
+
+  getDayNameFromDate(dateStr: string): string {
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day); // evitamos zona horaria incorrecta
+    return days[date.getDay()];
+  }
 }
