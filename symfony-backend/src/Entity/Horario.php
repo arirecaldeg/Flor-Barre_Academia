@@ -14,8 +14,8 @@ class Horario
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $fecha = null;
+    #[ORM\Column(type: Types::STRING, length: 20)]
+    private ?string $dia_semana = null; // Ej: "Lunes"
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $horario_inicio = null;
@@ -27,19 +27,23 @@ class Horario
     #[ORM\JoinColumn(nullable: false)]
     private ?Clase $clase = null;
 
+    // --------------------
+    // Getters y Setters
+    // --------------------
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFecha(): ?\DateTimeInterface
+    public function getDiaSemana(): ?string
     {
-        return $this->fecha;
+        return $this->dia_semana;
     }
 
-    public function setFecha(\DateTimeInterface $fecha): static
+    public function setDiaSemana(string $dia_semana): static
     {
-        $this->fecha = $fecha;
+        $this->dia_semana = $dia_semana;
 
         return $this;
     }

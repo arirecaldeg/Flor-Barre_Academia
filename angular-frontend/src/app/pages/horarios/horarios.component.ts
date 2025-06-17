@@ -23,19 +23,14 @@ export class HorarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.horarioService.getHorarios().subscribe({
-      next: (data) => {
-        this.horarios = data;
-        // Para depurar, opcional:
-        // data.forEach(h => console.log(`${h.fecha} → ${this.getDayNameFromDate(h.fecha)} @ ${h.horario_inicio}`));
-      },
+      next: (data) => this.horarios = data,
       error: (err) => console.error('Error al cargar horarios:', err)
     });
   }
 
   getClassName(day: string, time: string): string {
     const slot = this.horarios.find(h =>
-      this.getDayNameFromDate(h.fecha) === day &&
-      h.horario_inicio === time
+      h.dia_semana === day && h.horario_inicio === time
     );
     return slot?.clase?.nombre || '';
   }
@@ -43,12 +38,5 @@ export class HorarioComponent implements OnInit {
   getCellColor(day: string): string {
     const isLightDay = ['Lunes', 'Miércoles', 'Viernes'].includes(day);
     return isLightDay ? 'bg-[#EACFCE] text-[#333]' : 'bg-[#DCCACE] text-[#333]';
-  }
-
-  getDayNameFromDate(dateStr: string): string {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // evitamos zona horaria incorrecta
-    return days[date.getDay()];
   }
 }

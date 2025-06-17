@@ -9,9 +9,9 @@ export interface Clase {
 
 export interface Horario {
   id?: number;
-  fecha: string; // formato YYYY-MM-DD
+  dia_semana: string; // ← actualizado
   horario_inicio: string; // formato HH:mm
-  hora_fin: string; // formato HH:mm
+  hora_fin: string;       // formato HH:mm
   clase_id: number;
   clase?: Clase;
 }
@@ -39,7 +39,8 @@ export class HorarioService {
   deleteHorario(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
   getClases(): Observable<Clase[]> {
-  return this.http.get<Clase[]>('http://localhost:8080/api/clases');
-}
+    return this.http.get<Clase[]>('http://localhost:8080/api/clases');
+  }
 }

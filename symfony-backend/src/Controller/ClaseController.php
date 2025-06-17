@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Clase;
-use App\Entity\User;
 use App\Repository\ClaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +26,6 @@ class ClaseController extends AbstractController
                 'instructor' => $clase->getInstructor(),
                 'descripcion' => $clase->getDescripcion(),
                 'capacidad_maxima' => $clase->getCapacidadMaxima(),
-                'user_id' => $clase->getUser()?->getId(),
             ];
         }
 
@@ -49,7 +47,6 @@ class ClaseController extends AbstractController
             'instructor' => $clase->getInstructor(),
             'descripcion' => $clase->getDescripcion(),
             'capacidad_maxima' => $clase->getCapacidadMaxima(),
-            'user_id' => $clase->getUser()?->getId(),
         ]);
     }
 
@@ -58,18 +55,12 @@ class ClaseController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $user = $em->getRepository(User::class)->find($data['user_id']);
-        if (!$user) {
-            return $this->json(['error' => 'Usuario no encontrado'], 404);
-        }
-
         $clase = new Clase();
         $clase->setNombre($data['nombre']);
         $clase->setNivel($data['nivel']);
         $clase->setInstructor($data['instructor']);
         $clase->setDescripcion($data['descripcion']);
         $clase->setCapacidadMaxima($data['capacidad_maxima']);
-        $clase->setUser($user);
 
         $em->persist($clase);
         $em->flush();
@@ -86,17 +77,12 @@ class ClaseController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
-        $user = $em->getRepository(User::class)->find($data['user_id']);
-        if (!$user) {
-            return $this->json(['error' => 'Usuario no encontrado'], 404);
-        }
 
         $clase->setNombre($data['nombre']);
         $clase->setNivel($data['nivel']);
         $clase->setInstructor($data['instructor']);
         $clase->setDescripcion($data['descripcion']);
         $clase->setCapacidadMaxima($data['capacidad_maxima']);
-        $clase->setUser($user);
 
         $em->flush();
 

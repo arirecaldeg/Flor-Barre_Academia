@@ -31,9 +31,6 @@ class Clase
     #[ORM\Column]
     private ?int $capacidad_maxima = null;
 
-    #[ORM\ManyToOne(inversedBy: 'clases')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
 
     /**
      * @var Collection<int, Horario>
@@ -111,17 +108,7 @@ class Clase
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
 
-    public function setUser(User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Horario>

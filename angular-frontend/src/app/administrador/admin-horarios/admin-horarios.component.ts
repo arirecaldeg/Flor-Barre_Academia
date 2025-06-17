@@ -48,8 +48,7 @@ export class AdminHorariosComponent implements OnInit {
 
   getClassName(day: string, time: string): string {
     const slot = this.horarios.find(h =>
-      this.getDayNameFromDate(h.fecha) === day &&
-      h.horario_inicio === time
+      h.dia_semana === day && h.horario_inicio === time
     );
     return slot?.clase?.nombre || '';
   }
@@ -59,11 +58,9 @@ export class AdminHorariosComponent implements OnInit {
     if (isNaN(claseId)) return;
 
     const selectedClase = this.clases.find(c => c.id === claseId);
-    const fecha = this.getDateForDay(day);
 
     const existing = this.horarios.find(h =>
-      this.getDayNameFromDate(h.fecha) === day &&
-      h.horario_inicio === time
+      h.dia_semana === day && h.horario_inicio === time
     );
 
     if (!claseId && existing?.id) {
@@ -74,7 +71,7 @@ export class AdminHorariosComponent implements OnInit {
     }
 
     const payload: Horario = {
-      fecha,
+      dia_semana: day,
       horario_inicio: time,
       hora_fin: this.getHoraFinFromInicio(time),
       clase_id: claseId
@@ -95,27 +92,6 @@ export class AdminHorariosComponent implements OnInit {
       });
     }
   }
-
-  getDayNameFromDate(dateStr: string): string {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    return days[new Date(dateStr).getDay()];
-  }
-getDateForDay(day: string): string {
-  const dayMap: { [key: string]: number } = {
-    'Lunes': 1,
-    'Martes': 2,
-    'Miércoles': 3,
-    'Jueves': 4,
-    'Viernes': 5,
-    'Sábado': 6
-  };
-
-  const base = new Date('2025-06-16'); // lunes de una semana de ejemplo
-  const dayOffset = dayMap[day] ?? 1;
-  const result = new Date(base);
-  result.setDate(base.getDate() + (dayOffset - 1));
-  return result.toISOString().split('T')[0];
-}
 
   getHoraFinFromInicio(inicio: string): string {
     const [h, m] = inicio.split(':').map(Number);
