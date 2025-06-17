@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/api/users')]
 class UserController extends AbstractController
@@ -42,23 +43,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/', name: 'user_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
+#[Route('/', name: 'user_create', methods: ['POST'])]
+public function create(
+    Request $request,
+    EntityManagerInterface $em,
+    UserPasswordHasherInterface $passwordHasher
+): JsonResponse {
+    $data = json_decode($request->getContent(), true);
 
-        $user = new User();
-        $user->setNombre($data['nombre']);
-        $user->setEmail($data['email']);
-        $user->setContraseña($data['contraseña']);
-        $user->setTelefono($data['telefono']);
-        $user->setRol($data['rol']);
+    $user = new User();
+    $user->setNombre($data['nombre']);
+    $user->setEmail($data['email']);
+    $user->setTelefono($data['telefono']);
+    $user->setRol($data['rol'] ?? 'ROLE_USER');
 
-        $em->persist($user);
-        $em->flush();
+    // ✅ Encriptar la contraseña
+    $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
+    $user->setPassword($hashedPassword);
 
-        return $this->json(['message' => 'Usuario creado', 'id' => $user->getId()], Response::HTTP_CREATED);
-    }
+    $em->persist($user);
+    $em->flush();
+
+    return $this->json(['message' => 'Usuario creado', 'id' => $user->getId()], Response::HTTP_CREATED);
+}
 
     #[Route('/{id}', name: 'user_update', methods: ['PUT'])]
     public function update(Request $request, User $user, EntityManagerInterface $em): JsonResponse
@@ -67,7 +74,7 @@ class UserController extends AbstractController
 
         $user->setNombre($data['nombre'] ?? $user->getNombre());
         $user->setEmail($data['email'] ?? $user->getEmail());
-        $user->setContraseña($data['contraseña'] ?? $user->getContraseña());
+        $user->setPassword($data['password'] ?? $user->getPassword());
         $user->setTelefono($data['telefono'] ?? $user->getTelefono());
         $user->setRol($data['rol'] ?? $user->getRol());
 

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250617120004 extends AbstractMigration
+final class Version20250617184623 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,10 +21,13 @@ final class Version20250617120004 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            ALTER TABLE tarifa ADD orden INT NOT NULL
+            ALTER TABLE clase ADD users_id INT DEFAULT NULL
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE tarifa ALTER tipo SET NOT NULL
+            ALTER TABLE clase ADD CONSTRAINT FK_199FACCE67B3B43D FOREIGN KEY (users_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE INDEX IDX_199FACCE67B3B43D ON clase (users_id)
         SQL);
     }
 
@@ -35,10 +38,13 @@ final class Version20250617120004 extends AbstractMigration
             CREATE SCHEMA public
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE tarifa DROP orden
+            ALTER TABLE clase DROP CONSTRAINT FK_199FACCE67B3B43D
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE tarifa ALTER tipo DROP NOT NULL
+            DROP INDEX IDX_199FACCE67B3B43D
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE clase DROP users_id
         SQL);
     }
 }

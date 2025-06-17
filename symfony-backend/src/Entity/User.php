@@ -6,10 +6,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,7 +25,7 @@ class User
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $contraseña = null;
+    private ?string $password = null;
 
     #[ORM\Column]
     private ?int $telefono = null;
@@ -85,14 +87,14 @@ class User
         return $this;
     }
 
-    public function getContraseña(): ?string
+    public function getPassword(): ?string
     {
-        return $this->contraseña;
+        return $this->password;
     }
 
-    public function setContraseña(string $contraseña): static
+    public function setPassword(string $password): static
     {
-        $this->contraseña = $contraseña;
+        $this->password = $password;
 
         return $this;
     }
@@ -207,4 +209,21 @@ class User
 
         return $this;
     }
+
+        public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        // Symfony espera un array de roles como mínimo
+        return [$this->rol ?? 'ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si almacenaras datos sensibles temporales, se borrarían aquí.
+    }
+
 }
