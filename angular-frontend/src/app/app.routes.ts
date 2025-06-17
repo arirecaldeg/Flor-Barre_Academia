@@ -10,6 +10,7 @@ import { TarifasComponent } from './pages/tarifas/tarifas.component';
 //import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AdminHorariosComponent } from './administrador/admin-horarios/admin-horarios.component';
+import { AdminTarifasComponent } from './administrador/admin-tarifas/admin-tarifas.component';
 
 
 export const routes: Routes = [
@@ -24,5 +25,6 @@ export const routes: Routes = [
 
  // Rutas para el administrador
   { path: 'admin/horarios', component: AdminHorariosComponent },
+  { path: 'admin/tarifas', component: AdminTarifasComponent }
 
 ];

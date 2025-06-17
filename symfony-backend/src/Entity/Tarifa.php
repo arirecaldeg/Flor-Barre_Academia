@@ -17,10 +17,16 @@ class Tarifa
     private ?string $nombre = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $descripci�on = null;
+    private ?string $descripcion = null;
 
     #[ORM\Column]
     private ?int $precio = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $tipo = null;
+
+    #[ORM\Column(type: 'integer')]
+    private ?int $orden = null;
 
     public function getId(): ?int
     {
@@ -35,19 +41,17 @@ class Tarifa
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
-    public function getDescripci�on(): ?string
+    public function getDescripcion(): ?string
     {
-        return $this->descripci�on;
+        return $this->descripcion;
     }
 
-    public function setDescripci�on(string $descripci�on): static
+    public function setDescripcion(string $descripcion): static
     {
-        $this->descripci�on = $descripci�on;
-
+        $this->descripcion = $descripcion;
         return $this;
     }
 
@@ -59,7 +63,28 @@ class Tarifa
     public function setPrecio(int $precio): static
     {
         $this->precio = $precio;
-
         return $this;
+    }
+
+    public function getTipo(): ?string
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo(string $tipo): static
+    {
+        $this->tipo = $tipo;
+        return $this;
+    }
+
+    public function getOrden(): ?int
+    {
+    return $this->orden;
+    }
+
+    public function setOrden(int $orden): static
+    {
+    $this->orden = $orden;
+    return $this;
     }
 }

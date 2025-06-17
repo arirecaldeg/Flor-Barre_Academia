@@ -20,7 +20,7 @@ export class AdminHorariosComponent implements OnInit {
   clases: Clase[] = [];
   horarios: Horario[] = [];
 
-  constructor(private horarioService: HorarioService) {}
+  constructor(private horarioService: HorarioService) { }
 
   ngOnInit(): void {
     this.loadClases();
@@ -99,5 +99,11 @@ export class AdminHorariosComponent implements OnInit {
     end.setHours(h);
     end.setMinutes(m + 60);
     return end.toTimeString().slice(0, 5);
+  }
+  getClassId(day: string, time: string): number | null {
+    const slot = this.horarios.find(h =>
+      h.dia_semana === day && h.horario_inicio === time
+    );
+    return slot?.clase?.id || null;
   }
 }

@@ -20,11 +20,11 @@
                         <td *ngFor="let day of days" class="p-[4px]">
                             <div class="rounded-lg py-1 px-2 min-h-[40px] flex items-center justify-center"
                                 [ngClass]="getCellColor(day)">
-                                <select [ngModel]="getClassName(day, time)"
+                                <select [ngModel]="getClassId(day, time)"
                                     (ngModelChange)="updateClass(day, time, $event)"
                                     class="bg-transparent text-sm w-full text-center outline-none">
-                                    <option value="">–</option>
-                                    <option *ngFor="let clase of clases" [value]="clase.id">
+                                    <option [ngValue]="null"></option>
+                                    <option *ngFor="let clase of clases" [ngValue]="clase.id">
                                         {{ clase.nombre }}
                                     </option>
 

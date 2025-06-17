@@ -1,1 +1,42 @@
-<p>admin-tarifas works!</p>
+<div class="min-h-screen flex flex-col bg-white">
+  <!-- Título -->
+  <div class="bg-[#FCF7F8] h-32 flex items-center justify-center">
+    <h1 class="text-3xl font-semibold text-center">Editar Tarifas</h1>
+  </div>
+
+  <!-- Contenido -->
+  <div class="flex-grow bg-[#EACFCE] py-20 px-4 flex flex-col items-center">
+    <div class="bg-white rounded-xl p-10 shadow-md w-full max-w-3xl text-center">
+
+      <!-- BONOS MENSUALES -->
+      <h2 class="text-xl font-bold mb-6">BONOS MENSUALES</h2>
+      <div class="grid grid-cols-2 gap-y-3 mb-10 text-base font-medium">
+        <ng-container *ngFor="let tarifa of tarifasMensuales">
+          <input [(ngModel)]="tarifa.nombre" class="p-1 border rounded text-center" />
+          <input type="number" [(ngModel)]="tarifa.precio" class="p-1 border rounded text-center" />
+        </ng-container>
+      </div>
+
+      <!-- BONOS ANUALES -->
+      <h2 class="text-xl font-bold mb-6">BONOS ANUALES</h2>
+      <div class="grid grid-cols-2 gap-y-3 text-base font-medium">
+        <ng-container *ngFor="let tarifa of tarifasAnuales">
+          <input [(ngModel)]="tarifa.nombre" class="p-1 border rounded text-center" />
+          <input type="number" [(ngModel)]="tarifa.precio" class="p-1 border rounded text-center" />
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Guardar -->
+    <div class="mt-10">
+      <button (click)="guardarCambios()" class="bg-[#BD9FA5] hover:bg-[#a2888e] text-white px-6 py-3 rounded-xl text-lg font-semibold">
+        Guardar Cambios
+      </button>
+    </div>
+
+    <!-- Logo -->
+    <div class="flex justify-center mt-10">
+      <img src="florybarrefirma.png" alt="Flor y Barre logo" class="w-80" />
+    </div>
+  </div>
+</div>

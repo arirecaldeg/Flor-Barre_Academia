@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col bg-white">
   <!-- Título blanco con fondo rosita claro -->
   <div class="bg-[#FCF7F8] h-32 flex items-center justify-center">
-    <h1 class="text-3xl font-semibold text-center">Nuestras Clases</h1>
+    <h1 class="text-3xl font-semibold text-center">Nuestros Horarios</h1>
   </div>
 
   <!-- Bloque rosa claro que se expande hasta el footer -->
@@ -23,7 +23,7 @@
             <td class="p-3 text-sm font-semibold text-[#555]">{{ time }}</td>
             <td *ngFor="let day of days" class="p-[4px]">
               <div
-                class="text-sm text-center rounded-lg py-2 px-3 font-medium min-h-[40px] flex items-center justify-center"
+                class="text-sm text-center rounded-lg py-2 px-3 font-medium min-h-[40px] flex items-center justify-center uppercase"
                 [ngClass]="getCellColor(day)">
                 {{ getClassName(day, time) }}
               </div>

@@ -22,9 +22,9 @@ export class ClasesComponent {
     {
       nombre: 'Barre',
       imagen: 'barre.jpeg.webp',
-      cupo: '2/10',
-      duracion: '60 min',
-      nivel: 'Beginner',
+      cupo: '14',
+      duracion: '50 min',
+      nivel: 'Básico / Intermedio',
       descripcion: `Nuestra clase de Barre está diseñada para que cualquier persona, sin importar su nivel de experiencia o condición física, pueda disfrutar de una sesión completa, dinámica y profundamente transformadora. Combinamos movimientos inspirados en el ballet, el pilates y el yoga para trabajar de forma integral todo el cuerpo, enfocándonos en tonificación, alineación postural, resistencia y conexión mente-cuerpo.
 
 Si eres nueva en el mundo del barre, encontrarás opciones adaptadas para comenzar con seguridad y confianza. Y si ya tienes experiencia, te retarás con secuencias más intensas y conscientes. Aquí todas las barrealinas tienen su lugar, porque lo importante no es hacerlo perfecto, sino sentirte bien contigo misma en cada movimiento.
@@ -34,9 +34,9 @@ Una clase para fortalecer, estirar, respirar y, sobre todo, disfrutar.`,
     {
       nombre: 'Barre Suave',
       imagen: 'suave.jpg.webp',
-      cupo: '2/10',
-      duracion: '60 min',
-      nivel: 'Beginner',
+      cupo: '12',
+      duracion: '50 min',
+      nivel: 'Básico',
       descripcion: `Esta modalidad está pensada para quienes buscan una experiencia más pausada, amable y consciente. Ideal si te estás iniciando, si te estás recuperando de alguna lesión, o simplemente si ese día tu cuerpo te pide un ritmo más lento.
 
 En Barre Suave mantenemos la esencia del barre, trabajando fuerza, postura, flexibilidad y coordinación, pero con transiciones más suaves, más tiempo para cada movimiento y un enfoque profundo en la respiración y el autocuidado.
@@ -46,8 +46,8 @@ Es una clase perfecta para reconectar contigo misma, liberar tensiones y mover e
     {
       nombre: 'Barre PRO',
       imagen: 'pro.png',
-      cupo: '2/10',
-      duracion: '60 min',
+      cupo: '16',
+      duracion: '50 min',
       nivel: 'Avanzado',
       descripcion: `Esta clase está pensada para quienes ya tienen una base sólida en barre y desean llevar su práctica al siguiente nivel. En Barre PRO combinamos secuencias más exigentes, mayor duración en las posiciones y un enfoque técnico que desafía tanto la fuerza como la resistencia y el control corporal.
 
@@ -60,9 +60,9 @@ Una experiencia intensa y gratificante, creada para barrelinas que quieren más.
     {
       nombre: 'Barre EMB',
       imagen: 'emb.png',
-      cupo: '2/10',
-      duracion: '60 min',
-      nivel: 'Suave / Prenatal',
+      cupo: '8',
+      duracion: '50 min',
+      nivel: 'Embarazadas',
       descripcion: `En esta etapa tan especial de la vida, el movimiento consciente es una herramienta poderosa para cuidar el cuerpo, conectar con el bebé y fortalecer la mente.
 
 BARRE EMB es una clase diseñada específicamente para embarazadas y mamás recientes, respetando los cambios físicos y emocionales que acompañan al embarazo y al postparto.
@@ -76,9 +76,9 @@ Aquí, cada barrelinas EMB lleva su propio ritmo, y todas son bienvenidas.`,
     {
       nombre: 'Barre ENG',
       imagen: 'eng.png',
-      cupo: '2/10',
-      duracion: '60 min',
-      nivel: 'Beginner / English',
+      cupo: '12',
+      duracion: '50 min',
+      nivel: 'Básico / Intermedio',
       descripcion: `Hemos creado BARRE ENG, una clase pensada especialmente para barrelinas extranjeras, impartida íntegramente en inglés.
 
 Es una oportunidad perfecta para disfrutar de una sesión completa de barre —tonificación, elongación, equilibrio y conciencia corporal— en un ambiente acogedor y accesible, donde podrás seguir cada movimiento con claridad y sentirte parte de la comunidad.

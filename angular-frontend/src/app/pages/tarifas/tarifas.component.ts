@@ -1,10 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Tarifa {
-  nombre: string;
-  precio: string;
-}
+import { TarifasService } from '../../administrador/admin-tarifas/tarifas.service';
+import { Tarifa } from '../../models/tarifa';
 
 @Component({
   selector: 'app-tarifas',
@@ -12,18 +9,27 @@ interface Tarifa {
   imports: [CommonModule],
   templateUrl: './tarifas.component.html',
 })
-export class TarifasComponent {
-  bonosMensuales: Tarifa[] = [
-    { nombre: '4 CLASES', precio: '65€' },
-    { nombre: '8 CLASES', precio: '85€' },
-    { nombre: '12 CLASES', precio: '115€' },
-    { nombre: 'ILIMITADO', precio: '135€' },
-  ];
+export class TarifasComponent implements OnInit {
+  bonosMensuales: Tarifa[] = [];
+  bonosAnuales: Tarifa[] = [];
 
-  bonosAnuales: Tarifa[] = [
-    { nombre: '1 CLASE', precio: '25€' },
-    { nombre: '4 CLASES', precio: '85€' },
-    { nombre: '8 CLASES', precio: '115€' },
-    { nombre: '12 CLASES', precio: '165€' },
-  ];
+  constructor(private tarifasService: TarifasService) {}
+
+ngOnInit(): void {
+    this.tarifasService.getTarifas().subscribe((tarifas) => {
+      this.bonosMensuales = tarifas
+        .filter(t => t.tipo === 'mensual')
+        .sort((a, b) => a.orden - b.orden);
+
+      this.bonosAnuales = tarifas
+        .filter(t => t.tipo === 'anual')
+        .sort((a, b) => a.orden - b.orden);
+    });
+  }
+
+  ordenPersonalizado(nombre: string): number {
+    const orden = ['1 CLASE', '4 CLASES', '8 CLASES', '12 CLASES', 'ILIMITADO'];
+    const index = orden.indexOf(nombre);
+    return index === -1 ? orden.length : index; // Si no se encuentra, lo pone al final
+  }
 }

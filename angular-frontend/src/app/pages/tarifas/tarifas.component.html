@@ -1,35 +1,35 @@
 <div class="min-h-screen flex flex-col bg-white">
-  <!-- Título en fondo blanco -->
+  <!-- Título -->
   <div class="bg-[#FCF7F8] h-32 flex items-center justify-center">
     <h1 class="text-3xl font-semibold text-center">Nuestras Tarifas</h1>
   </div>
 
-  <!-- Contenido en fondo rosa -->
+  <!-- Contenido -->
   <div class="flex-grow bg-[#EACFCE] py-20 px-4 flex flex-col items-center">
-    <!-- Caja blanca con las tarifas -->
     <div class="bg-white rounded-xl p-10 shadow-md w-full max-w-3xl text-center">
+
+      <!-- BONOS MENSUALES -->
       <h2 class="text-xl font-bold mb-6">BONOS MENSUALES</h2>
       <div class="grid grid-cols-2 gap-y-3 mb-10 text-base font-medium">
-        <span>4 CLASES</span><span>65€</span>
-        <span>8 CLASES</span><span>85€</span>
-        <span>12 CLASES</span><span>115€</span>
-        <span>ILIMITADO</span><span>135€</span>
+        <ng-container *ngFor="let tarifa of bonosMensuales">
+          <span>{{ tarifa.nombre }}</span>
+          <span>{{ tarifa.precio }}€</span>
+        </ng-container>
       </div>
 
+      <!-- BONOS ANUALES -->
       <h2 class="text-xl font-bold mb-6">BONOS ANUALES</h2>
       <div class="grid grid-cols-2 gap-y-3 text-base font-medium">
-        <span>1 CLASE</span><span>25€</span>
-        <span>4 CLASES</span><span>85€</span>
-        <span>8 CLASES</span><span>115€</span>
-        <span>12 CLASES</span><span>165€</span>
+        <ng-container *ngFor="let tarifa of bonosAnuales">
+          <span>{{ tarifa.nombre }}</span>
+          <span>{{ tarifa.precio }}€</span>
+        </ng-container>
       </div>
     </div>
 
-    <!-- Logo centrado debajo -->
+    <!-- Logo -->
     <div class="flex justify-center mt-10">
       <img src="florybarrefirma.png" alt="Flor y Barre logo" class="w-80" />
     </div>
   </div>
-
-  <!-- El footer vendrá automáticamente desde app.component.html -->
 </div>
