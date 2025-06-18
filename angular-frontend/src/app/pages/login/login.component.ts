@@ -30,7 +30,7 @@ export class LoginComponent {
       this.authService.login(email, password).subscribe({
         next: () => {
           console.log('Login correcto');
-          this.router.navigate(['/']); // o donde quieras redirigir
+          window.location.href = '/'; // o donde quieras redirigir
         },
         error: (err) => {
           console.error('Error al iniciar sesión:', err);
