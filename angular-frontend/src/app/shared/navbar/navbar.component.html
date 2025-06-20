@@ -28,7 +28,7 @@
       <div class="relative hidden md:block">
         <button (click)="toggleMenu()"
           class="flex items-center gap-2 border border-[#EACFCE] rounded-full px-4 py-2 hover:bg-black hover:text-white transition">
-          <span>{{ userName }}</span>
+          <span>{{ userName || 'Iniciar Sesión' }}</span>
 
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
             stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
