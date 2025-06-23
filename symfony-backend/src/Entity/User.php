@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $rol = null;
 
+    #[ORM\Column(type: 'integer')]
+    private int $pases = 0;
+
     /**
      * @var Collection<int, Clase>
      */
@@ -50,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Reserva::class, mappedBy: 'users')]
     private Collection $reservas;
+
 
     public function __construct()
     {
@@ -224,6 +228,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // Si almacenaras datos sensibles temporales, se borrarían aquí.
+    }
+
+    public function getPases(): int
+    {
+        return $this->pases;
+    }
+
+    public function setPases(int $pases): static
+    {
+    $this->pases = $pases;
+        return $this;
     }
 
 }

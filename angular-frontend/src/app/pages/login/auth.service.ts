@@ -23,17 +23,18 @@ export class AuthService {
   
 
   login(email: string, password: string) {
-    return this.http.post<any>('http://localhost:8080/api/login', { email, password }).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.token);
+  return this.http.post<any>('http://localhost:8080/api/login', { email, password }).pipe(
+    tap(response => {
+      localStorage.setItem('token', response.token);
 
-        const decoded: any = jwtDecode(response.token);
-        console.log('Token decodificado:', decoded); // 👈 AÑADE ESTA LÍNEA
-        console.log('Token decodificado:', decoded); // 👈 AÑADE ESTO
-        localStorage.setItem('userName', decoded.username);
-      })
-    );
-  }
+      const decoded: any = jwtDecode(response.token);
+      console.log('Token decodificado:', decoded);
+
+      localStorage.setItem('userName', decoded.username);
+      localStorage.setItem('userId', decoded.id); // ✅ AÑADE ESTA LÍNEA
+    })
+  );
+}
 
   getToken() {
     return localStorage.getItem('token');
@@ -43,6 +44,11 @@ export class AuthService {
   getUserName(): string | null {
     return localStorage.getItem('userName');
   }
+  
+  getUserId(): number | null {
+  const id = localStorage.getItem('userId');
+  return id ? parseInt(id, 10) : null;
+}
 
   logout() {
     localStorage.removeItem('token');

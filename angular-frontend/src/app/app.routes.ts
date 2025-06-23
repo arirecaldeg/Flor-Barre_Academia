@@ -25,6 +25,8 @@ export const routes: Routes = [
 
  // Rutas para el administrador
   { path: 'admin/horarios', component: AdminHorariosComponent },
-  { path: 'admin/tarifas', component: AdminTarifasComponent }
+  { path: 'admin/tarifas', component: AdminTarifasComponent },
 
+ // Rutas para el usuario
+  { path: 'reservar-clase', loadComponent: () => import('./pages/reservar-clase/reservar-clase.component').then(m => m.ReservarClaseComponent) }
 ];

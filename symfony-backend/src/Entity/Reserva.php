@@ -24,7 +24,7 @@ class Reserva
     #[ORM\JoinColumn(nullable: false)]
     private ?User $users = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'reservas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Clase $clases = null;
 
@@ -74,10 +74,9 @@ class Reserva
         return $this->clases;
     }
 
-    public function setClases(Clase $clases): static
+   public function setClases(?Clase $clases): static
     {
-        $this->clases = $clases;
-
-        return $this;
+    $this->clases = $clases;
+    return $this;
     }
 }

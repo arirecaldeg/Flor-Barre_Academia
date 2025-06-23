@@ -1,0 +1,20 @@
+<h2 class="text-xl font-bold mb-4">Reservar Clase</h2>
+
+<div *ngIf="horariosSemana?.length; else noClases">
+  <div *ngFor="let horario of horariosSemana" class="mb-4 p-4 border rounded shadow">
+    <p><strong>Clase:</strong> {{ horario.clase?.nombre }}</p>
+    <p><strong>Día:</strong> {{ horario.dia_semana }}</p>
+    <p><strong>Hora:</strong> {{ horario.horario_inicio }} - {{ horario.hora_fin }}</p>
+    <button
+      class="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+      (click)="reservar(horario.clase?.id!)">
+      Reservar
+    </button>
+  </div>
+</div>
+
+<ng-template #noClases>
+  <p>No hay clases disponibles esta semana.</p>
+</ng-template>
+
+<p *ngIf="mensaje" class="mt-4 text-green-600">{{ mensaje }}</p>

@@ -31,19 +31,8 @@ class Clase
     #[ORM\Column]
     private ?int $capacidad_maxima = null;
 
-  #[ORM\ManyToOne(inversedBy: 'clases')]
+    #[ORM\ManyToOne(inversedBy: 'clases')]
     private ?User $users = null;
-
-    public function getUsers(): ?User
-    {
-    return $this->users;
-    }
-
-    public function setUsers(?User $user): static
-    {
-    $this->users = $user;
-    return $this;
-    }
 
     /**
      * @var Collection<int, Horario>
@@ -51,9 +40,16 @@ class Clase
     #[ORM\OneToMany(targetEntity: Horario::class, mappedBy: 'clase')]
     private Collection $horarios;
 
+    /**
+     * @var Collection<int, Reserva>
+     */
+    #[ORM\OneToMany(mappedBy: 'clases', targetEntity: Reserva::class)]
+    private Collection $reservas;
+
     public function __construct()
     {
         $this->horarios = new ArrayCollection();
+        $this->reservas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,7 +65,6 @@ class Clase
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -81,7 +76,6 @@ class Clase
     public function setNivel(string $nivel): static
     {
         $this->nivel = $nivel;
-
         return $this;
     }
 
@@ -93,7 +87,6 @@ class Clase
     public function setInstructor(string $instructor): static
     {
         $this->instructor = $instructor;
-
         return $this;
     }
 
@@ -105,7 +98,6 @@ class Clase
     public function setDescripcion(string $descripcion): static
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
@@ -117,11 +109,19 @@ class Clase
     public function setCapacidadMaxima(int $capacidad_maxima): static
     {
         $this->capacidad_maxima = $capacidad_maxima;
-
         return $this;
     }
 
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
 
+    public function setUsers(?User $user): static
+    {
+        $this->users = $user;
+        return $this;
+    }
 
     /**
      * @return Collection<int, Horario>
@@ -144,9 +144,37 @@ class Clase
     public function removeHorario(Horario $horario): static
     {
         if ($this->horarios->removeElement($horario)) {
-            // set the owning side to null (unless already changed)
             if ($horario->getClase() === $this) {
                 $horario->setClase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reserva>
+     */
+    public function getReservas(): Collection
+    {
+        return $this->reservas;
+    }
+
+    public function addReserva(Reserva $reserva): static
+    {
+        if (!$this->reservas->contains($reserva)) {
+            $this->reservas->add($reserva);
+            $reserva->setClases($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReserva(Reserva $reserva): static
+    {
+        if ($this->reservas->removeElement($reserva)) {
+            if ($reserva->getClases() === $this) {
+                $reserva->setClases(null);
             }
         }
 
