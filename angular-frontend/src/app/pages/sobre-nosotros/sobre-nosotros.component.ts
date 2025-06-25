@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-sobre-nosotros',
   imports: [],
   templateUrl: './sobre-nosotros.component.html',
-  styleUrl: './sobre-nosotros.component.css'
+
 })
 export class SobreNosotrosComponent {
 

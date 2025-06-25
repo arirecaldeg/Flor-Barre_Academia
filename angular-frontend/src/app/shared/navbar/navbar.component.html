@@ -17,8 +17,16 @@
     <ul class="hidden md:flex gap-8 text-base font-light ml-0 md:ml-40 lg:ml-80">
       <li><a routerLink="/sobre-nosotros" class="hover:underline">Sobre Nosotros</a></li>
       <li><a routerLink="/clases" class="hover:underline">Clases</a></li>
-      <li><a routerLink="/horarios" class="hover:underline">Horarios</a></li>
-      <li><a routerLink="/tarifas" class="hover:underline">Tarifas</a></li>
+      <li>
+        <a [routerLink]="authService.isAdmin() ? '/admin/horarios' : '/horarios'" class="hover:underline">
+          Horarios
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="authService.isAdmin() ? '/admin/tarifas' : '/tarifas'" class="hover:underline">
+          Tarifas
+        </a>
+      </li>
       <li><a routerLink="/contactanos" class="hover:underline">Contáctanos</a></li>
     </ul>
 
@@ -38,7 +46,7 @@
 
         </button>
         <div *ngIf="isMenuOpen" class="absolute right-0 mt-2 w-40 bg-white text-black shadow-lg rounded z-50">
-          <a routerLink="/reservar" class="block px-4 py-2 hover:bg-gray-100">Reservar Clase</a>
+          <a routerLink="/reservar-clase" class="block px-4 py-2 hover:bg-gray-100">Reservar Clase</a>
           <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500">Cerrar
             sesión</button>
         </div>

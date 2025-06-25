@@ -31,7 +31,7 @@
                   <span class="font-semibold">{{ slot.clase?.nombre || '-' }}</span>
                   <span class="text-xs">{{ slot.horario_inicio || '-' }} - {{ slot.hora_fin || '-' }}</span>
                   <button *ngIf="slot.clase?.id"
-                    class="bg-[#BD9FA5] text-white px-2 py-1 mt-1 rounded-full hover:bg-blue-700 transition flex items-center gap-1"
+                    class="bg-[#BD9FA5] text-white px-2 py-1 mt-1 rounded-full hover:bg-[#9a8287] transition flex items-center gap-1"
                     (click)="reservar(slot.clase!.id, dia, hora)">
                     <span>Reservar</span>
                   </button>
@@ -48,7 +48,7 @@
       </table>
       <!-- Lista de reservas -->
       <div class="mt-10 max-w-4xl mx-auto">
-        <h3 class="text-xl font-semibold mb-4 text-[#BD9FA5]">Tus reservas esta semana</h3>
+        <h3 class="text-xl font-semibold mb-4 text-black">Tus reservas esta semana</h3>
         <div *ngIf="reservasSemana.length; else noReservas">
           <ul>
             <li *ngFor="let reserva of reservasSemana"
@@ -59,7 +59,7 @@
                   {{ getDiaLabelYFecha(reserva.fecha_reserva) }}
                 </span>
               </div>
-              <button class="bg-red-500 text-white rounded px-3 py-1 text-xs hover:bg-red-700"
+              <button class="bg-[#BD9FA5] text-white rounded px-3 py-1 text-xs hover:bg-[#9a8287]"
                 (click)="cancelarReserva(reserva.id)">
                 Cancelar
               </button>
