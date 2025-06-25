@@ -1,20 +1,75 @@
-<h2 class="text-xl font-bold mb-4">Reservar Clase</h2>
+<div class="bg-[#EACFCE] min-h-screen py-8">
+  <div class="container mx-auto px-4">
+    <!-- Cabecera: Título y Pases alineados -->
+    <div class="flex items-center justify-between max-w-6xl mx-auto mt-12 mb-12">
+      <h2 class="text-2xl font-bold text-center flex-1">Reservar clase</h2>
+      <div class="ml-4">
+        <div
+          class="bg-white border border-gray-300 rounded-lg px-3 py-1.5 shadow font-semibold flex items-center gap-1">
+          <span class="text-[#BD9FA5] text-sm">PASES:</span>
+          <span class="font-bold text-base text-[#BD9FA5]">{{ pases ?? '-' }}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="mensaje" class="mb-4 text-green-600 text-center">{{ mensaje }}</div>
+  </div>
 
-<div *ngIf="horariosSemana?.length; else noClases">
-  <div *ngFor="let horario of horariosSemana" class="mb-4 p-4 border rounded shadow">
-    <p><strong>Clase:</strong> {{ horario.clase?.nombre }}</p>
-    <p><strong>Día:</strong> {{ horario.dia_semana }}</p>
-    <p><strong>Hora:</strong> {{ horario.horario_inicio }} - {{ horario.hora_fin }}</p>
-    <button
-      class="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-      (click)="reservar(horario.clase?.id!)">
-      Reservar
-    </button>
+  <div class="max-w-6xl mx-auto">
+    <div class="overflow-x-auto">
+      <!-- Tabla de clases disponibles -->
+      <table class="min-w-full bg-white rounded shadow text-sm">
+        <thead>
+          <tr>
+            <th class="p-2 border" *ngFor="let dia of diasSemana">{{ dia }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hora of horasDisponibles">
+            <td class="p-2 border text-center" *ngFor="let dia of diasSemana">
+              <ng-container *ngIf="claseEnHorario(dia, hora) as slot">
+                <div class="flex flex-col items-center">
+                  <span class="font-semibold">{{ slot.clase?.nombre || '-' }}</span>
+                  <span class="text-xs">{{ slot.horario_inicio || '-' }} - {{ slot.hora_fin || '-' }}</span>
+                  <button *ngIf="slot.clase?.id"
+                    class="bg-[#BD9FA5] text-white px-2 py-1 mt-1 rounded-full hover:bg-blue-700 transition flex items-center gap-1"
+                    (click)="reservar(slot.clase!.id, dia, hora)">
+                    <span>Reservar</span>
+                  </button>
+
+
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!claseEnHorario(dia, hora)">
+                <span class="text-gray-300">—</span>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Lista de reservas -->
+      <div class="mt-10 max-w-4xl mx-auto">
+        <h3 class="text-xl font-semibold mb-4 text-[#BD9FA5]">Tus reservas esta semana</h3>
+        <div *ngIf="reservasSemana.length; else noReservas">
+          <ul>
+            <li *ngFor="let reserva of reservasSemana"
+              class="mb-3 flex items-center justify-between bg-[#f6e8e6] px-4 py-2 rounded shadow">
+              <div>
+                <span class="font-semibold text-[#BD9FA5]">{{ reserva.clase_nombre }}</span>
+                <span class="ml-2 text-sm text-gray-700">
+                  {{ getDiaLabelYFecha(reserva.fecha_reserva) }}
+                </span>
+              </div>
+              <button class="bg-red-500 text-white rounded px-3 py-1 text-xs hover:bg-red-700"
+                (click)="cancelarReserva(reserva.id)">
+                Cancelar
+              </button>
+            </li>
+          </ul>
+        </div>
+        <ng-template #noReservas>
+          <p class="text-gray-500 text-sm text-center">No tienes reservas esta semana.</p>
+        </ng-template>
+      </div>
+    </div>
   </div>
 </div>
-
-<ng-template #noClases>
-  <p>No hay clases disponibles esta semana.</p>
-</ng-template>
-
-<p *ngIf="mensaje" class="mt-4 text-green-600">{{ mensaje }}</p>

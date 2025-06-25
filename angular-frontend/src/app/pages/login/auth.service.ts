@@ -44,6 +44,10 @@ export class AuthService {
   getUserName(): string | null {
     return localStorage.getItem('userName');
   }
+
+  getUserInfo(id: number) {
+  return this.http.get<any>(`http://localhost:8080/api/users/${id}`);
+}
   
   getUserId(): number | null {
   const id = localStorage.getItem('userId');

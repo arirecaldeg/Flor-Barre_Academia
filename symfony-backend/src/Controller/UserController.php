@@ -25,7 +25,8 @@ class UserController extends AbstractController
             'nombre' => $user->getNombre(),
             'email' => $user->getEmail(),
             'telefono' => $user->getTelefono(),
-            'rol' => $user->getRol()
+            'rol' => $user->getRol(),
+            'pases' => $user->getPases()
         ], $users);
 
         return $this->json($data);
@@ -39,7 +40,8 @@ class UserController extends AbstractController
             'nombre' => $user->getNombre(),
             'email' => $user->getEmail(),
             'telefono' => $user->getTelefono(),
-            'rol' => $user->getRol()
+            'rol' => $user->getRol(),
+            'pases' => $user->getPases()
         ]);
     }
 

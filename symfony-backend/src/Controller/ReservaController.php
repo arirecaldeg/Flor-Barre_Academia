@@ -44,14 +44,17 @@ class ReservaController extends AbstractController
             return $this->json(['error' => 'Usuario o clase no válidos'], 400);
         }
 
-        // 🚫 Verificar si ya existe una reserva del usuario para esta clase
+        // 🚫 Verificar si ya existe una reserva para el usuario, la clase y la fecha/hora
+        $fechaReserva = new \DateTime($data['fecha_reserva'] ?? 'now');
+
         $existingReserva = $em->getRepository(Reserva::class)->findOneBy([
             'users' => $user,
-            'clases' => $clase
+            'clases' => $clase,
+            'fecha_reserva' => $fechaReserva,
         ]);
 
         if ($existingReserva) {
-            return $this->json(['error' => 'Ya tienes una reserva para esta clase'], 400);
+            return $this->json(['error' => 'Ya tienes una reserva para esta clase en ese horario'], 400);
         }
 
         // 🚫 Verificar si el usuario tiene pases disponibles
@@ -64,7 +67,7 @@ class ReservaController extends AbstractController
         $reserva->setUsers($user);
         $reserva->setClases($clase);
         $reserva->setEstado($data['estado'] ?? 'pendiente');
-        $reserva->setFechaReserva(new \DateTime($data['fecha_reserva'] ?? 'now'));
+        $reserva->setFechaReserva($fechaReserva);
 
         // 🔻 Restar 1 pase
         $user->setPases($user->getPases() - 1);
@@ -154,22 +157,38 @@ class ReservaController extends AbstractController
         $inicioSemana = (new \DateTimeImmutable('monday this week'))->setTime(0, 0, 0);
         $finSemana = (new \DateTimeImmutable('sunday this week'))->setTime(23, 59, 59);
 
+        $hoy = new \DateTimeImmutable('today');
+        $fin = $hoy->modify('+6 days')->setTime(23, 59, 59);
+
         $query = $em->createQuery(
             'SELECT r FROM App\Entity\Reserva r
-             WHERE r.users = :user
-             AND r.fecha_reserva BETWEEN :inicio AND :fin
-             ORDER BY r.fecha_reserva ASC'
+            WHERE r.users = :user
+            AND r.fecha_reserva BETWEEN :inicio AND :fin
+            ORDER BY r.fecha_reserva ASC'
         )
             ->setParameter('user', $user)
-            ->setParameter('inicio', $inicioSemana)
-            ->setParameter('fin', $finSemana);
+            ->setParameter('inicio', $hoy)
+            ->setParameter('fin', $fin);
 
         $reservas = $query->getResult();
 
+        // Devuelve también el día de la semana y la hora
         $data = array_map(function (Reserva $reserva) {
+            $fecha = $reserva->getFechaReserva();
+            $diasSemana = [
+                'Domingo',
+                'Lunes',
+                'Martes',
+                'Miércoles',
+                'Jueves',
+                'Viernes',
+                'Sábado'
+            ];
             return [
                 'id' => $reserva->getId(),
-                'fecha_reserva' => $reserva->getFechaReserva()->format('Y-m-d H:i:s'),
+                'fecha_reserva' => $fecha->format('Y-m-d H:i:s'),
+                'dia_semana' => $diasSemana[(int) $fecha->format('w')],
+                'hora' => $fecha->format('H:i'),
                 'estado' => $reserva->getEstado(),
                 'clase_id' => $reserva->getClases()?->getId(),
                 'clase_nombre' => $reserva->getClases()?->getNombre(),
