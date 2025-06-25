@@ -45,29 +45,32 @@ class UserController extends AbstractController
         ]);
     }
 
-#[Route('/', name: 'user_create', methods: ['POST'])]
-public function create(
-    Request $request,
-    EntityManagerInterface $em,
-    UserPasswordHasherInterface $passwordHasher
-): JsonResponse {
-    $data = json_decode($request->getContent(), true);
+    #[Route('/', name: 'user_create', methods: ['POST'])]
+    public function create(
+        Request $request,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
 
-    $user = new User();
-    $user->setNombre($data['nombre']);
-    $user->setEmail($data['email']);
-    $user->setTelefono($data['telefono']);
-    $user->setRol($data['rol'] ?? 'ROLE_USER');
+        $user = new User();
+        $user->setNombre($data['nombre']);
+        $user->setEmail($data['email']);
 
-    // ✅ Encriptar la contraseña
-    $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
-    $user->setPassword($hashedPassword);
+        if (isset($data['telefono'])) {
+            $user->setTelefono($data['telefono']);
+        }
 
-    $em->persist($user);
-    $em->flush();
+        $user->setRol($data['rol'] ?? 'ROLE_USER');
 
-    return $this->json(['message' => 'Usuario creado', 'id' => $user->getId()], Response::HTTP_CREATED);
-}
+        $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
+        $user->setPassword($hashedPassword);
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->json(['message' => 'Usuario creado', 'id' => $user->getId()], Response::HTTP_CREATED);
+    }
 
     #[Route('/{id}', name: 'user_update', methods: ['PUT'])]
     public function update(Request $request, User $user, EntityManagerInterface $em): JsonResponse
@@ -77,7 +80,11 @@ public function create(
         $user->setNombre($data['nombre'] ?? $user->getNombre());
         $user->setEmail($data['email'] ?? $user->getEmail());
         $user->setPassword($data['password'] ?? $user->getPassword());
-        $user->setTelefono($data['telefono'] ?? $user->getTelefono());
+
+        if (isset($data['telefono'])) {
+            $user->setTelefono($data['telefono']);
+        }
+
         $user->setRol($data['rol'] ?? $user->getRol());
 
         $em->flush();
@@ -93,4 +100,25 @@ public function create(
 
         return $this->json(['message' => 'Usuario eliminado']);
     }
+
+    #[Route('/{id}/pases', name: 'user_add_pases', methods: ['PUT'])]
+    public function addPases(User $user, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $cantidad = $data['pases'] ?? 0;
+
+        if (!is_numeric($cantidad) || $cantidad < 0) {
+            return $this->json(['error' => 'Cantidad de pases inválida'], 400);
+        }
+
+        $user->setPases($user->getPases() + (int)$cantidad);
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Pases asignados correctamente',
+            'pases_actuales' => $user->getPases()
+        ]);
+    }
+
+    
 }

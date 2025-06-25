@@ -27,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $telefono = null;
 
     #[ORM\Column(length: 50)]
@@ -108,12 +108,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->telefono;
     }
 
-    public function setTelefono(int $telefono): static
+    public function setTelefono(?int $telefono): static
     {
         $this->telefono = $telefono;
-
-        return $this;
-    }
+    return $this;
+}
 
     public function getRol(): ?string
     {

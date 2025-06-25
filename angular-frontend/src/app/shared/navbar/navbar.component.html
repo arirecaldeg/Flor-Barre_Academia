@@ -9,7 +9,7 @@
     </div>
 
     <!-- Botón Hamburguesa (solo visible en móvil) -->
-    <button id="menu-btn" class="block md:hidden text-2xl focus:outline-none">
+    <button (click)="toggleMobileMenu()" class="block md:hidden text-2xl focus:outline-none">
       ☰
     </button>
 
@@ -47,9 +47,14 @@
         </button>
         <div *ngIf="isMenuOpen" class="absolute right-0 mt-2 w-40 bg-white text-black shadow-lg rounded z-50">
           <a routerLink="/reservar-clase" class="block px-4 py-2 hover:bg-gray-100">Reservar Clase</a>
-          <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500">Cerrar
+
+          <!-- Solo para admin -->
+          <a *ngIf="authService.isAdmin()" routerLink="/admin/pases" class="block px-4 py-2 hover:bg-gray-100">Pases</a>
+
+          <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-[#917b7e]">Cerrar
             sesión</button>
         </div>
+
       </div>
     </ng-container>
 
@@ -64,15 +69,16 @@
 
 
   <!-- Menú desplegable en móvil -->
-  <div id="mobile-menu" class="mt-4 hidden md:hidden flex-col space-y-4">
-    <a routerLink="/clases" class="block hover:underline">Clases</a>
-    <a routerLink="/sobre-nosotros" class="block hover:underline">Sobre Nosotros</a>
-    <a routerLink="/horarios" class="block hover:underline">Horarios</a>
-    <a routerLink="/tarifas" class="block hover:underline">Tarifas</a>
-    <a routerLink="/contacto" class="block hover:underline">Contáctanos</a>
-    <button
+  <div [class.hidden]="!isMobileMenuOpen" class="mt-4 md:hidden flex-col space-y-4">
+    <a routerLink="/clases" (click)="closeMobileMenu()" class="block hover:underline">Clases</a>
+    <a routerLink="/sobre-nosotros" (click)="closeMobileMenu()" class="block hover:underline">Sobre Nosotros</a>
+    <a routerLink="/horarios" (click)="closeMobileMenu()" class="block hover:underline">Horarios</a>
+    <a routerLink="/tarifas" (click)="closeMobileMenu()" class="block hover:underline">Tarifas</a>
+    <a routerLink="/contacto" (click)="closeMobileMenu()" class="block hover:underline">Contáctanos</a>
+    <button routerLink="/login" (click)="closeMobileMenu()"
       class="w-full border border-black rounded-full px-6 py-2 text-sm hover:bg-black hover:text-white transition">
       Iniciar Sesión
     </button>
   </div>
+
 </nav>

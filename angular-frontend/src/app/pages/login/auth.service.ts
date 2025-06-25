@@ -81,4 +81,12 @@ export class AuthService {
   isAdmin(): boolean {
     return this.getRole() === 'ROLE_ADMIN'; // <-- compara con el valor real
   }
+  registrarUsuario(datos: {
+  nombre: string;
+  email: string;
+  password: string;
+  rol?: string;
+}) {
+  return this.http.post('http://localhost:8080/api/users/', datos);
+}
 }

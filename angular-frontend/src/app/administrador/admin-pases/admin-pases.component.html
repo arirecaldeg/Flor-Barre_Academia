@@ -1,0 +1,26 @@
+<section class="max-w-4xl mx-auto mt-8 px-4">
+  <h2 class="text-3xl font-bold text-gray-800 mb-6">Gestión de Pases</h2>
+
+  <div *ngFor="let usuario of usuarios" class="bg-white shadow-md rounded-lg p-5 mb-4 border border-gray-200">
+    <div class="flex justify-between items-center mb-2">
+      <div>
+        <p class="text-lg font-semibold text-gray-900">{{ usuario.nombre }}</p>
+        <p class="text-sm text-gray-600">{{ usuario.email }}</p>
+        <p class="text-sm text-gray-600">Pases actuales: <span class="font-medium text-[#826e71]">{{ usuario.pases }}</span></p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input type="number"
+               min="1"
+               [(ngModel)]="paseInput[usuario.id]"
+               placeholder="Cantidad"
+               class="w-24 px-3 py-1.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-[#C0A3A7] text-sm" />
+
+        <button (click)="asignarPases(usuario.id)"
+                class="bg-[#C0A3A7] hover:bg-[#A06B6F] text-white text-sm font-semibold px-4 py-1.5 rounded-md shadow-sm transition">
+          Asignar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

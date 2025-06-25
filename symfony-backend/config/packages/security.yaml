@@ -40,6 +40,7 @@ security:
         - { path: ^/api/tarifas, roles: PUBLIC_ACCESS }
         - { path: ^/api/horarios, roles: PUBLIC_ACCESS }
         - { path: ^/api/clases, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users/users$, methods: [GET], roles: PUBLIC_ACCESS } 
 
         - { path: ^/api/admin/horarios, roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

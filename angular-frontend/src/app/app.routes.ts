@@ -11,6 +11,7 @@ import { TarifasComponent } from './pages/tarifas/tarifas.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AdminHorariosComponent } from './administrador/admin-horarios/admin-horarios.component';
 import { AdminTarifasComponent } from './administrador/admin-tarifas/admin-tarifas.component';
+import { AdminPasesComponent } from './administrador/admin-pases/admin-pases.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,8 @@ export const routes: Routes = [
  // Rutas para el administrador
   { path: 'admin/horarios', component: AdminHorariosComponent },
   { path: 'admin/tarifas', component: AdminTarifasComponent },
+  { path: 'admin/pases', component: AdminPasesComponent },
+
 
  // Rutas para el usuario
   { path: 'reservar-clase', loadComponent: () => import('./pages/reservar-clase/reservar-clase.component').then(m => m.ReservarClaseComponent) }

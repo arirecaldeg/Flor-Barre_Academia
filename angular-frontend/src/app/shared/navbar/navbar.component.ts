@@ -38,4 +38,12 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+  isMobileMenuOpen = false;
+
+toggleMobileMenu() {
+  this.isMobileMenuOpen = !this.isMobileMenuOpen;
+}
+closeMobileMenu() {
+  this.isMobileMenuOpen = false;
+}
 }
